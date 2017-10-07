@@ -10,18 +10,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class GetAvailableResources.
  */
 final class GetAvailableResources
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
     /**
      * @var ResourceRepository
      */
@@ -30,12 +24,10 @@ final class GetAvailableResources
     /**
      * GetAvailableResources constructor.
      *
-     * @param SerializerInterface $serializer
      * @param ResourceRepository  $resourceRepository
      */
-    public function __construct(SerializerInterface $serializer, ResourceRepository $resourceRepository)
+    public function __construct(ResourceRepository $resourceRepository)
     {
-        $this->serializer = $serializer;
         $this->resourceRepository = $resourceRepository;
     }
 
