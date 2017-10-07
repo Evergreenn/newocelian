@@ -5,7 +5,10 @@ namespace AppBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -13,7 +16,15 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
 
+    public function __construct(EncoderFactoryInterface $encoderFactoryInterface)
+    {
+        $this->encoderFactory = $encoderFactoryInterface;
+    }
 
     /**
      * Returns a response that directs the user to authenticate.
@@ -35,17 +46,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = NULL)
     {
-
-        $user = $request->request->get('mail');
-
-        if (empty($token) === true && empty($user) === true) {
             return new Response('Credentials Required', 401);
-        }
-
-        return array(
-            'user' => $user,
-        );
-
     }
 
     /**
@@ -76,16 +77,17 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
+        if (null === $header = $request->headers->get('authorization')) {
+            throw new UnauthorizedHttpException('Challenge me !');
+        }
 
-        if ($request->request->has('user') && $request->request->has('token')) {
-            return array(
-               'user' => $request->request->get('user'),
-               'token' => $request->request->get('token'),
-           );
-       } else {
-            return;
-      }
+        list ($basic, $credentials) = explode(' ', $header);
+        list ($email, $password) = explode(':', base64_decode($credentials));
 
+        return  [
+            'email' => $email,
+            'password' => $password,
+        ];
     }
 
     /**
@@ -105,14 +107,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-
-        $token = $credentials['user'];
-
-        if (null === $token) {
-            return;
-        }
-
-        return $userProvider->loadUserByUsername($token);
+        return $userProvider->loadUserByUsername($credentials['email']);
     }
 
     /**
@@ -133,11 +128,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if($user->getPassword() === $credentials['token']){
-            return true;
-        }
+        $encoder = $this->encoderFactory->getEncoder($user);
 
-        return false;
+        return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], $user->getSalt());
     }
 
     /**
