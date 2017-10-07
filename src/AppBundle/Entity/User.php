@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     attributes={
  *         "normalization_context" = {"groups" = {"read"}},
  *         "denormalization_context" = {"groups" = {"write"}}
- *     }
+ *     },
  * )
  */
 class User implements UserInterface, \Serializable
