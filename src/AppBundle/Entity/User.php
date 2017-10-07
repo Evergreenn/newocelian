@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * User.
@@ -17,7 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity("email", message="Cette adresse mail est déjà prise.")
  *
- * @ApiResource()
+ * @ApiResource(
+ *     attributes={
+ *         "normalization_context" = {"groups" = {"read"}},
+ *         "denormalization_context" = {"groups" = {"write"}}
+ *     },
+ * )
  */
 class User implements UserInterface, \Serializable
 {
@@ -29,6 +35,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"read"})
      */
     private $id;
 
@@ -38,6 +45,7 @@ class User implements UserInterface, \Serializable
      * @Assert\Email(message="L'adresse mail n'est pas valide.")
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Groups({"read", "write"})
      */
     private $email;
 
@@ -50,6 +58,8 @@ class User implements UserInterface, \Serializable
      *     minMessage="Le mot de passe doit faire 5 charactères minimum.",
      *     maxMessage="Le mot de passe doit faire 32 charactères maximum."
      * )
+     *
+     * @Groups({"write"})
      */
     private $plainPassword;
 
@@ -64,6 +74,8 @@ class User implements UserInterface, \Serializable
      * @var array
      *
      * @ORM\Column(name="roles", type="array")
+     *
+     * @Groups({"read"})
      */
     private $roles = [];
 
