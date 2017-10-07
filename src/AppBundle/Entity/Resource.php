@@ -1,17 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Resource
+ * Resource.
  *
  * @ORM\Table(name="resource")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ResourceRepository")
  *
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "available_resources" = {"route_name" = "available_resources"},
+ *         "get" = {"method" = "GET"},
+ *         "post" = {"method" = "POST"},
+ *     }
+ * )
  */
 class Resource
 {
@@ -39,7 +47,7 @@ class Resource
     private $date;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -49,11 +57,11 @@ class Resource
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
-     * @return Resource
+     * @return resource
      */
     public function setType($type)
     {
@@ -63,7 +71,7 @@ class Resource
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -73,11 +81,11 @@ class Resource
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
      *
-     * @return Resource
+     * @return resource
      */
     public function setDate($date)
     {
@@ -87,7 +95,7 @@ class Resource
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
