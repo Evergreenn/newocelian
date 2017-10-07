@@ -1,36 +1,36 @@
 <?php
 
-declare(strict_types=1);
+namespace AppBundle\Security\Guard;
 
-namespace AppBundle\Security;
-
+use AppBundle\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-class TokenAuthenticator extends AbstractGuardAuthenticator
+/**
+ * Class ApiTokenAuthenticator.
+ */
+class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 {
     /**
-     * @var EncoderFactoryInterface
+     * @var UserRepository
      */
-    private $encoderFactory;
+    private $userRepository;
 
     /**
-     * TokenAuthenticator constructor.
+     * ApiTokenAuthenticator constructor.
      *
-     * @param EncoderFactoryInterface $encoderFactoryInterface
+     * @param UserRepository          $userRepository
      */
-    public function __construct(EncoderFactoryInterface $encoderFactoryInterface)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->encoderFactory = $encoderFactoryInterface;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -46,21 +46,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if (null === $header = $request->headers->get('authorization')) {
+        if (null === $token = $request->headers->get('ocelian-token')) {
             throw new UnauthorizedHttpException('Challenge me !');
         }
 
-        list($basic, $credentials) = \explode(' ', $header);
-        if ('Basic' !== $basic) {
-            throw new BadRequestHttpException('Challenge me !');
-        }
-
-        list($email, $password) = \explode(':', \base64_decode($credentials));
-
-        return [
-            'email'    => $email,
-            'password' => $password,
-        ];
+        return $token;
     }
 
     /**
@@ -68,7 +58,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return $userProvider->loadUserByUsername($credentials['email']);
+        return $this->userRepository->findOneBy(['apiToken' => $credentials]);
     }
 
     /**
@@ -76,9 +66,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        $encoder = $this->encoderFactory->getEncoder($user);
-
-        return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], $user->getSalt());
+        return true;
     }
 
     /**

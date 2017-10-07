@@ -5,7 +5,7 @@ SESSION_DIR = var/sessions/
 MAKEFILE_DIR = $(shell pwd)
 
 # Default value
-ENTITY = OcelianCoreBundle 
+ENTITY = AppBundle 
 
 # Bin files
 CS_FIXER = bin/php-cs-fixer-v2.phar

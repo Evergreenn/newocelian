@@ -4,3 +4,9 @@ services:
         factory: ['@doctrine.orm.entity_manager', getRepository]
         arguments:
             - 'AppBundle:Resource'
+
+    app.user_repository:
+        class: AppBundle\Repository\UserRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - 'AppBundle:User'

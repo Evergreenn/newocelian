@@ -18,8 +18,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            pattern: ^/
+            pattern: ^/(?!users)
             anonymous: ~
             guard:
                 authenticators:
-                    - AppBundle\Security\TokenAuthenticator
+                    - AppBundle\Security\Guard\EmailPasswordAuthenticator
+                    - AppBundle\Security\Guard\ApiTokenAuthenticator
+                entry_point: AppBundle\Security\Guard\EmailPasswordAuthenticator

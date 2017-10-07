@@ -28,7 +28,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, \Serializable
 {
     const DEFAULT_ROLE = 'ROLE_USER';
-    const TOKEN_LENGTH = 16;
 
     /**
      * @var int
@@ -241,29 +240,5 @@ class User implements UserInterface, \Serializable
             $this->email,
             $this->password
         ) = \unserialize($serialized);
-    }
-
-    /**
-     * Set apiToken
-     *
-     * @param string $apiToken
-     *
-     * @return User
-     */
-    public function setApiToken($apiToken)
-    {
-        $this->apiToken = $apiToken;
-
-        return $this;
-    }
-
-    /**
-     * Get apiToken
-     *
-     * @return string
-     */
-    public function getApiToken()
-    {
-        return $this->apiToken;
     }
 }
