@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -7,12 +9,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Appointment
+ * Appointment.
  *
  * @ORM\Table(name="appointment")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AppointmentRepository")
  *
- * @ApiResource()
+ * @ApiResource
  */
 class Appointment
 {
@@ -45,7 +47,7 @@ class Appointment
     private $resources;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -53,7 +55,7 @@ class Appointment
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -63,7 +65,7 @@ class Appointment
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
      *
@@ -77,7 +79,7 @@ class Appointment
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -87,7 +89,7 @@ class Appointment
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
      *
@@ -101,7 +103,7 @@ class Appointment
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -111,9 +113,9 @@ class Appointment
     }
 
     /**
-     * Add resource
+     * Add resource.
      *
-     * @param Resource $resource
+     * @param resource $resource
      *
      * @return Appointment
      */
@@ -125,9 +127,9 @@ class Appointment
     }
 
     /**
-     * Remove resource
+     * Remove resource.
      *
-     * @param Resource $resource
+     * @param resource $resource
      */
     public function removeResource(Resource $resource)
     {
@@ -135,7 +137,7 @@ class Appointment
     }
 
     /**
-     * Get resources
+     * Get resources.
      *
      * @return \Doctrine\Common\Collections\Collection
      */

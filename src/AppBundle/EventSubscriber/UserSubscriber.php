@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppBundle\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
@@ -47,7 +49,7 @@ class UserSubscriber implements EventSubscriberInterface
     {
         $user = $event->getControllerResult();
         $request = $event->getRequest();
-        if (!$user instanceof User && !in_array($request->getMethod(), [Request::METHOD_POST, Request::METHOD_PUT])) {
+        if (!$user instanceof User && !\in_array($request->getMethod(), [Request::METHOD_POST, Request::METHOD_PUT])) {
             return;
         }
 
