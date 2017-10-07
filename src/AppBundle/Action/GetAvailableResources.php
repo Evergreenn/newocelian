@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Class GetAvailableResources.
  */
-class GetAvailableResources
+final class GetAvailableResources
 {
     /**
      * @var SerializerInterface

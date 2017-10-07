@@ -47,7 +47,7 @@ class UserSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::VIEW => [
-                ['encodePassword', EventPriorities::PRE_WRITE], ['generateToken', EventPriorities::PRE_WRITE]
+                ['encodePassword', EventPriorities::PRE_WRITE], ['generateToken', EventPriorities::PRE_WRITE],
             ],
         ];
     }

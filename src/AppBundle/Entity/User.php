@@ -244,7 +244,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Set apiToken
+     * Set apiToken.
      *
      * @param string $apiToken
      *
@@ -258,7 +258,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Get apiToken
+     * Get apiToken.
      *
      * @return string
      */

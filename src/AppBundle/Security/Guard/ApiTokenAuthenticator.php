@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AppBundle\Security\Guard;
 
 use AppBundle\Repository\UserRepository;
@@ -26,7 +28,7 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * ApiTokenAuthenticator constructor.
      *
-     * @param UserRepository          $userRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(UserRepository $userRepository)
     {
