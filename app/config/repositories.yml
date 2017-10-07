@@ -1,0 +1,6 @@
+services:
+    app.resources_repository:
+        class: AppBundle\Repository\ResourceRepository
+        factory: ['@doctrine.orm.entity_manager', getRepository]
+        arguments:
+            - 'AppBundle:Resource'

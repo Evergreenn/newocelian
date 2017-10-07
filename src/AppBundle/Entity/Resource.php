@@ -11,7 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="resource")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ResourceRepository")
  *
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *      "available_resources" = {"route_name"="available_resources"},
+ *      "get" = {"method" = "GET"},
+ *      "post" = {"method" = "POST"},
+ *     }
+ * )
  */
 class Resource
 {
