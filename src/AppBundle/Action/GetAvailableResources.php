@@ -8,9 +8,12 @@ use AppBundle\Domain\Resource\ResourceManager;
 use AppBundle\Entity\Resource;
 use AppBundle\Repository\ResourceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class GetAvailableResources.
@@ -28,15 +31,22 @@ final class GetAvailableResources
     private $resourceManager;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * GetAvailableResources constructor.
      *
-     * @param ResourceRepository $resourceRepository
-     * @param ResourceManager    $resourceManager
+     * @param ResourceRepository  $resourceRepository
+     * @param ResourceManager     $resourceManager
+     * @param SerializerInterface $serializer
      */
-    public function __construct(ResourceRepository $resourceRepository, ResourceManager $resourceManager)
+    public function __construct(ResourceRepository $resourceRepository, ResourceManager $resourceManager, SerializerInterface $serializer)
     {
         $this->resourceRepository = $resourceRepository;
         $this->resourceManager = $resourceManager;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -50,7 +60,7 @@ final class GetAvailableResources
      *
      * @param Request $request
      *
-     * @return array
+     * @return JsonResponse
      */
     public function __invoke(Request $request)
     {
@@ -67,6 +77,35 @@ final class GetAvailableResources
             $resources = $this->resourceManager->createResources($datetime);
         }
 
-        return $resources;
+        $countBike = 0;
+        $countCarpet = 0;
+        $countEllipticBike = 0;
+        foreach ($resources as $resource) {
+            switch ($resource->getType()) {
+                case 'bike':
+                    $countBike++;
+                    break;
+                case 'carpet':
+                    $countCarpet++;
+                    break;
+                case 'elliptic_bike':
+                    $countEllipticBike++;
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        $data = [
+            'resources' => $resources,
+            'countBike' => $countBike,
+            'countCarpet' => $countCarpet,
+            'countEllipticBike' => $countEllipticBike,
+        ];
+
+        $response =  new JsonResponse();
+        $response->setData($this->serializer->serialize($data, 'json'));
+
+        return $response;
     }
 }
