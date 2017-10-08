@@ -59,6 +59,10 @@ class UserSubscriber implements EventSubscriberInterface
     {
         $user = $event->getControllerResult();
         $request = $event->getRequest();
+        if (is_array($user)) {
+            return;
+        }
+
         if (!$user instanceof User && !\in_array($request->getMethod(), [Request::METHOD_POST, Request::METHOD_PUT])) {
             return;
         }
@@ -79,6 +83,10 @@ class UserSubscriber implements EventSubscriberInterface
     {
         $user = $event->getControllerResult();
         $request = $event->getRequest();
+        if (is_array($user)) {
+            return;
+        }
+
         if (!$user instanceof User && !$request->isMethod(Request::METHOD_POST)) {
             return;
         }
