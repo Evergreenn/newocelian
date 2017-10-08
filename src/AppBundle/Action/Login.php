@@ -44,6 +44,7 @@ final class Login
         return new JsonResponse([
             'message'   => 'Login success',
             'api_token' => $user->getApiToken(),
+            'email'     => $user->getEmail(),
         ]);
     }
 }

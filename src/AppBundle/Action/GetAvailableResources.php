@@ -38,7 +38,7 @@ final class GetAvailableResources
      *     defaults={"_api_resource_class" = Resource::class, "_api_collection_operation_name" = "available_resources"}
      * )
      *
-     * @Method("GET")
+     * @Method("POST")
      *
      * @param Request $request
      *
