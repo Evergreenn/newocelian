@@ -67,7 +67,7 @@ final class GetAvailableResources
         $body = $request->getContent();
         $date = \json_decode($body, true);
         if (!isset($date['date'])) {
-            throw new BadRequestHttpException();
+            throw new BadRequestHttpException('Date invalide');
         }
 
         $datetime = new \DateTime($date['date']);

@@ -2,10 +2,11 @@
 
 namespace AppBundle\Action;
 
+use AppBundle\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Class Login.
@@ -13,18 +14,18 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 final class Login
 {
     /**
-     * @var TokenStorageInterface
+     * @var UserRepository
      */
-    private $tokenStorage;
+    private $userRepository;
 
     /**
      * Login constructor.
      *
-     * @param TokenStorageInterface $tokenStorage
+     * @param UserRepository $userRepository
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->tokenStorage = $tokenStorage;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -35,16 +36,19 @@ final class Login
      *
      * @Method("POST")
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
+        $user = $this->userRepository->findOneBy(['email' => $request->request->get('email')]);
 
         return new JsonResponse([
             'message'   => 'Login success',
             'api_token' => $user->getApiToken(),
             'email'     => $user->getEmail(),
+            'id'        => $user->getId(),
         ]);
     }
 }
