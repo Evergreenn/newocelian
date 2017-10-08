@@ -84,15 +84,15 @@ final class GetAvailableResources
         foreach ($resources as $resource) {
             switch ($resource->getType()) {
                 case 'bike':
-                    $resourcesData['bike'] = $resource;
+                    $resourcesData['bike'][] = $resource;
                     $countBike++;
                     break;
                 case 'carpet':
-                    $resourcesData['carpet'] = $resource;
+                    $resourcesData['carpet'][] = $resource;
                     $countCarpet++;
                     break;
                 case 'elliptic_bike':
-                    $resourcesData['elliptic_bike'] = $resource;
+                    $resourcesData['elliptic_bike'][] = $resource;
                     $countEllipticBike++;
                     break;
                 default:
