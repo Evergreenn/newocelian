@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Action;
 
+use AppBundle\Domain\Resource\ResourceManager;
 use AppBundle\Entity\Resource;
 use AppBundle\Repository\ResourceRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -22,13 +23,20 @@ final class GetAvailableResources
     private $resourceRepository;
 
     /**
+     * @var ResourceManager
+     */
+    private $resourceManager;
+
+    /**
      * GetAvailableResources constructor.
      *
-     * @param ResourceRepository  $resourceRepository
+     * @param ResourceRepository $resourceRepository
+     * @param ResourceManager    $resourceManager
      */
-    public function __construct(ResourceRepository $resourceRepository)
+    public function __construct(ResourceRepository $resourceRepository, ResourceManager $resourceManager)
     {
         $this->resourceRepository = $resourceRepository;
+        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -53,7 +61,11 @@ final class GetAvailableResources
         }
 
         $datetime = new \DateTime($date['date']);
-        $resources = $this->resourceRepository->findBy(['date' => $datetime]);
+        $resources = $this->resourceRepository->findBy(['date' => $datetime, 'appointment' => null]);
+
+        if (empty($resources)) {
+            $resources = $this->resourceManager->createResources($datetime);
+        }
 
         return $resources;
     }

@@ -23,6 +23,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Resource
 {
+    const BIKE = 26;
+    const CARPET = 1;
+    const ELLIPTIC_BIKE = 1;
+
+    const TYPES = [
+        'bike',
+        'carpet',
+        'elliptic_bike'
+    ];
+
     /**
      * @var int
      *
@@ -45,6 +55,13 @@ class Resource
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+     * @var Appointment
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Appointment")
+     */
+    private $appointment;
 
     /**
      * Get id.
@@ -102,5 +119,29 @@ class Resource
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set appointment
+     *
+     * @param \AppBundle\Entity\Appointment $appointment
+     *
+     * @return Resource
+     */
+    public function setAppointment(\AppBundle\Entity\Appointment $appointment = null)
+    {
+        $this->appointment = $appointment;
+
+        return $this;
+    }
+
+    /**
+     * Get appointment
+     *
+     * @return \AppBundle\Entity\Appointment
+     */
+    public function getAppointment()
+    {
+        return $this->appointment;
     }
 }

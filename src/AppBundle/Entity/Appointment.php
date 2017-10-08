@@ -42,11 +42,6 @@ class Appointment
     private $user;
 
     /**
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Resource", cascade={"persist", "remove"})
-     */
-    private $resources;
-
-    /**
      * Constructor.
      */
     public function __construct()
