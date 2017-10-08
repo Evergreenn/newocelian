@@ -42,6 +42,13 @@ class Appointment
     private $user;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Resource", mappedBy="appointment")
+     */
+    private $resources;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -117,6 +124,7 @@ class Appointment
     public function addResource(Resource $resource)
     {
         $this->resources[] = $resource;
+        $resource->setAppointment($this);
 
         return $this;
     }
@@ -128,6 +136,7 @@ class Appointment
      */
     public function removeResource(Resource $resource)
     {
+        $resource->setAppointment(null);
         $this->resources->removeElement($resource);
     }
 

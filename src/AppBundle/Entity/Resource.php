@@ -124,11 +124,11 @@ class Resource
     /**
      * Set appointment
      *
-     * @param \AppBundle\Entity\Appointment $appointment
+     * @param Appointment $appointment
      *
      * @return Resource
      */
-    public function setAppointment(\AppBundle\Entity\Appointment $appointment = null)
+    public function setAppointment(Appointment $appointment = null)
     {
         $this->appointment = $appointment;
 
@@ -138,7 +138,7 @@ class Resource
     /**
      * Get appointment
      *
-     * @return \AppBundle\Entity\Appointment
+     * @return Appointment
      */
     public function getAppointment()
     {
